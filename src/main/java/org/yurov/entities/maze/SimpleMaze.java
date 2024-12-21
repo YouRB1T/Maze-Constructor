@@ -9,7 +9,7 @@ import org.yurov.entities.graph.SimpleGraph;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class SimpleMaze {
     private SimpleGraph graph;
+    private Integer[][] arrayMaze;
 }

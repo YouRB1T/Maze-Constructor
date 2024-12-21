@@ -93,33 +93,26 @@ public class MainApp {
 
 
     public static void main(String[] args) {
-        int rows = 5; // Количество строк
-        int cols = 5; // Количество столбцов
-        int minValue = 1; // Минимальное значение
-        int maxValue = 10; // Максимальное значение
+        // Пример входного массива
+        Integer[][] array = {
+                {10, 20, 30},
+                {5, 15, 25},
+                {1, 8, 35}
+        };
 
-        // Генерация случайного двумерного массива
-        Integer[][] randomArray = ArrayUtils.generateRandom2DArray(rows, cols, minValue, maxValue);
+        // Создаём экземпляр класса с алгоритмом
+        GraphUtils program = new GraphUtils(); // Если метод в другом классе, укажи его имя вместо Main
 
-        // Вывод сгенерированного массива
-        System.out.println("Сгенерированный массив:");
-        for (Integer[] row : randomArray) {
-            for (Integer value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
+        // Запускаем алгоритм
+        List<Point[]> mstEdges = program.algorithmPrima(array);
 
-        // Создание экземпляра алгоритма Прима
-        GraphUtils primAlgorithm = new GraphUtils();
-
-        // Запуск алгоритма Прима и получение пути
-        List<Point> path = primAlgorithm.algorithmPrima(randomArray);
-
-        // Вывод результата
-        System.out.println("\nПуть минимального остовного дерева:");
-        for (Point point : path) {
-            System.out.println("Клетка: (" + point.getX() + ", " + point.getY() + ") с весом: " + randomArray[point.getY()][point.getX()]);
+        // Выводим результат
+        System.out.println("Минимальное оставное дерево (MST):");
+        for (Point[] edge : mstEdges) {
+            Point from = edge[0];
+            Point to = edge[1];
+            System.out.printf("(%d, %d) -> (%d, %d)%n", from.getX(), from.getY(), to.getX(), to.getY());
         }
     }
+
 }

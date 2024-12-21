@@ -1,5 +1,6 @@
 package org.yurov.utils;
 
+import org.yurov.entities.EdgeForPoint;
 import org.yurov.entities.Point;
 import org.yurov.entities.graph.Edge;
 import org.yurov.entities.graph.SimpleGraph;
@@ -8,7 +9,7 @@ import org.yurov.entities.tree.SpanningTree;
 
 import java.util.*;
 
-public class GraphUtils<T> {
+public class GraphUtils {
 
     /**
      * Simple realisation Prim's algorithm on the graph
@@ -73,82 +74,77 @@ public class GraphUtils<T> {
         return answer;
     }
 
-    public List<Point> algorithmPrima(Integer[][] array) {
+    public List<Point[]> algorithmPrima(Integer[][] array) {
         return algorithmPrimaOnArray(array);
     }
 
-    private List<Point> algorithmPrimaOnArray(Integer[][] array) {
+    private List<Point[]> algorithmPrimaOnArray(Integer[][] array) {
         int rows = array.length;
         int cols = array[0].length;
-        boolean[][] used = new boolean[rows][cols];
-        List<Point> path = new ArrayList<>();
-        PriorityQueue<Point> pq = new PriorityQueue<>((p1, p2) -> {
-            double weight1 = calculateMinEdgeWeight(array, p1, used);
-            double weight2 = calculateMinEdgeWeight(array, p2, used);
-            return Double.compare(weight1, weight2);
-        });
 
-        Point start = findMinWeightCell(array);
-        pq.add(start);
+        // Поиск стартовой
+        Point start = null;
+        int minWeight = Integer.MAX_VALUE;
 
-        Point end = findMaxWeightCell(array);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (array[i][j] < minWeight) {
+                    minWeight = array[i][j];
+                    start = new Point(i, j);
+                }
+            }
+        }
 
-        while (!pq.isEmpty()) {
-            Point current = pq.poll();
+        if (start == null) {
+            throw new IllegalStateException("Стартовая точка не найдена.");
+        }
 
-            if (used[current.getY()][current.getX()]) {
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        PriorityQueue<EdgeForPoint> priorityQueue = new PriorityQueue<>(
+                Comparator.comparingInt(EdgeForPoint::getWeight)
+        );
+
+        boolean[][] visited = new boolean[rows][cols];
+
+        List<Point[]> mstEdges = new ArrayList<>();
+
+        visited[start.getY()][start.getY()] = true;
+        addEdges(start, array, visited, priorityQueue, directions);
+
+        // Построение MST
+        while (!priorityQueue.isEmpty()) {
+            EdgeForPoint edge = priorityQueue.poll();
+
+            Point to = edge.getDestination();
+
+            if (visited[to.getX()][to.getY()]) {
                 continue;
             }
 
-            used[current.getY()][current.getX()] = true;
-            path.add(current);
+            // Добавляем ребро в MST
+            mstEdges.add(new Point[]{edge.getSource(), to});
+            visited[to.getX()][to.getY()] = true;
 
-            if (current.equals(end)) {
-                break;
-            }
-
-            for (Point neighbor : getNeighbors(current, rows, cols)) {
-                if (!used[neighbor.getY()][neighbor.getX()]) {
-                    pq.add(neighbor);
-                }
-            }
+            // Добавляем новые рёбра из текущей вершины
+            addEdges(to, array, visited, priorityQueue, directions);
         }
 
-        return path;
+        return mstEdges;
     }
 
-    private Point findMinWeightCell(Integer[][] array) {
-        Point minPoint = new Point(0, 0);
-        int minWeight = Integer.MAX_VALUE;
+    private void addEdges(Point from, Integer[][] array, boolean[][] visited, PriorityQueue<EdgeForPoint> queue, int[][] directions) {
+        int rows = array.length;
+        int cols = array[0].length;
 
-        for (int y = 0; y < array.length; y++) {
-            for (int x = 0; x < array[0].length; x++) {
-                if (array[y][x] < minWeight) {
-                    minWeight = array[y][x];
-                    minPoint.setX(x);
-                    minPoint.setY(y);
-                }
+        for (int[] dir : directions) {
+            int newX = from.getX() + dir[0];
+            int newY = from.getY() + dir[1];
+
+            if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited[newX][newY]) {
+                queue.add(new EdgeForPoint(from, new Point(newX, newY), Math.abs(array[newX][newY] - array[from.getX()][from.getY()])));
             }
         }
-
-        return minPoint;
-    }
-
-    private Point findMaxWeightCell(Integer[][] array) {
-        Point maxPoint = new Point(0, 0);
-        int maxWeight = Integer.MIN_VALUE;
-
-        for (int y = 0; y < array.length; y++) {
-            for (int x = 0; x < array[0].length; x++) {
-                if (array[y][x] > maxWeight) {
-                    maxWeight = array[y][x];
-                    maxPoint.setX(x);
-                    maxPoint.setY(y);
-                }
-            }
-        }
-
-        return maxPoint;
     }
 
     private List<Point> getNeighbors(Point point, int rows, int cols) {
