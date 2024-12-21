@@ -93,33 +93,28 @@ public class MainApp {
 
 
     public static void main(String[] args) {
-        int rows = 5; // Количество строк
-        int cols = 5; // Количество столбцов
-        int minValue = 1; // Минимальное значение
-        int maxValue = 10; // Максимальное значение
+        // Пример входного массива
+        Integer[][] array = new Integer[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
 
-        // Генерация случайного двумерного массива
-        Integer[][] randomArray = ArrayUtils.generateRandom2DArray(rows, cols, minValue, maxValue);
+        System.out.println(ArrayUtils.D2DArrayToString(array));
 
-        // Вывод сгенерированного массива
-        System.out.println("Сгенерированный массив:");
-        for (Integer[] row : randomArray) {
-            for (Integer value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
+        // Создаём экземпляр класса с алгоритмом
+        GraphUtils program = new GraphUtils(); // Если метод в другом классе, укажи его имя вместо Main
 
-        // Создание экземпляра алгоритма Прима
-        GraphUtils primAlgorithm = new GraphUtils();
+        // Запускаем алгоритм
+        List<Point[]> mstEdges = program.algorithmPrima(array);
 
-        // Запуск алгоритма Прима и получение пути
-        List<Point> path = primAlgorithm.algorithmPrima(randomArray);
-
-        // Вывод результата
-        System.out.println("\nПуть минимального остовного дерева:");
-        for (Point point : path) {
-            System.out.println("Клетка: (" + point.getX() + ", " + point.getY() + ") с весом: " + randomArray[point.getY()][point.getX()]);
+        // Выводим результат
+        System.out.println("Минимальное оставное дерево (MST):");
+        for (Point[] edge : mstEdges) {
+            Point from = edge[0];
+            Point to = edge[1];
+            System.out.printf("(%d, %d) -> (%d, %d)%n", from.getX(), from.getY(), to.getX(), to.getY());
         }
     }
+
 }

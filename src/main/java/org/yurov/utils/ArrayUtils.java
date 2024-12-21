@@ -1,5 +1,6 @@
 package org.yurov.utils;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class ArrayUtils {
@@ -15,6 +16,17 @@ public class ArrayUtils {
         }
 
         return array;
+    }
+
+    public static String D2DArrayToString (Integer[][] array) {
+        StringBuilder stringArray = new StringBuilder();
+
+        for (Integer[] row : array) {
+            stringArray.append(Arrays.toString(row));
+            stringArray.append("\n");
+        }
+
+        return stringArray.toString();
     }
 
 }
