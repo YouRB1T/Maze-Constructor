@@ -94,11 +94,13 @@ public class MainApp {
 
     public static void main(String[] args) {
         // Пример входного массива
-        Integer[][] array = {
-                {10, 20, 30},
-                {5, 15, 25},
-                {1, 8, 35}
+        Integer[][] array = new Integer[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
         };
+
+        System.out.println(ArrayUtils.D2DArrayToString(array));
 
         // Создаём экземпляр класса с алгоритмом
         GraphUtils program = new GraphUtils(); // Если метод в другом классе, укажи его имя вместо Main

@@ -1,6 +1,7 @@
 package org.yurov.utils;
 
 import org.yurov.entities.EdgeForPoint;
+import org.yurov.entities.EdgeForPointUtils;
 import org.yurov.entities.Point;
 import org.yurov.entities.graph.Edge;
 import org.yurov.entities.graph.SimpleGraph;
@@ -79,21 +80,15 @@ public class GraphUtils {
     }
 
     private List<Point[]> algorithmPrimaOnArray(Integer[][] array) {
+
+        if (array == null) {
+            throw new IllegalStateException("Нужен массив для генерации остовного дерева");
+        }
+
         int rows = array.length;
         int cols = array[0].length;
 
-        // Поиск стартовой
-        Point start = null;
-        int minWeight = Integer.MAX_VALUE;
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (array[i][j] < minWeight) {
-                    minWeight = array[i][j];
-                    start = new Point(i, j);
-                }
-            }
-        }
+        Point start = findMinWeightPoint(array);
 
         if (start == null) {
             throw new IllegalStateException("Стартовая точка не найдена.");
@@ -109,10 +104,9 @@ public class GraphUtils {
 
         List<Point[]> mstEdges = new ArrayList<>();
 
-        visited[start.getY()][start.getY()] = true;
+        visited[start.getY()][start.getX()] = true;
         addEdges(start, array, visited, priorityQueue, directions);
 
-        // Построение MST
         while (!priorityQueue.isEmpty()) {
             EdgeForPoint edge = priorityQueue.poll();
 
@@ -122,18 +116,17 @@ public class GraphUtils {
                 continue;
             }
 
-            // Добавляем ребро в MST
             mstEdges.add(new Point[]{edge.getSource(), to});
             visited[to.getX()][to.getY()] = true;
 
-            // Добавляем новые рёбра из текущей вершины
             addEdges(to, array, visited, priorityQueue, directions);
         }
 
         return mstEdges;
     }
 
-    private void addEdges(Point from, Integer[][] array, boolean[][] visited, PriorityQueue<EdgeForPoint> queue, int[][] directions) {
+    private void addEdges(Point from, Integer[][] array, boolean[][] visited, PriorityQueue<EdgeForPoint> queue,
+                          int[][] directions) {
         int rows = array.length;
         int cols = array[0].length;
 
@@ -142,41 +135,27 @@ public class GraphUtils {
             int newY = from.getY() + dir[1];
 
             if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited[newX][newY]) {
-                queue.add(new EdgeForPoint(from, new Point(newX, newY), Math.abs(array[newX][newY] - array[from.getX()][from.getY()])));
+                Point to = new Point(newX, newY);
+                queue.add(new EdgeForPoint(from, to, EdgeForPointUtils.calculateWeight(array, from, to)));
             }
         }
     }
 
-    private List<Point> getNeighbors(Point point, int rows, int cols) {
-        List<Point> neighbors = new ArrayList<>();
-        int x = point.getX();
-        int y = point.getY();
+    private Point findMinWeightPoint(Integer[][] array) {
+        Point start = new Point();
 
-        if (x > 0) neighbors.add(new Point(x - 1, y));
-        if (x < cols - 1) neighbors.add(new Point(x + 1, y));
-        if (y > 0) neighbors.add(new Point(x, y - 1));
-        if (y < rows - 1) neighbors.add(new Point(x, y + 1));
+        int minWeight = Integer.MAX_VALUE;
 
-        return neighbors;
-    }
-
-    private double calculateMinEdgeWeight(Integer[][] array, Point point, boolean[][] inMST) {
-        double minWeight = Double.MAX_VALUE;
-
-        for (Point neighbor : getNeighbors(point, array.length, array[0].length)) {
-            if (!inMST[neighbor.getY()][neighbor.getX()]) {
-                double weight = calculateEdgeWeight(array, point, neighbor);
-                minWeight = Math.min(minWeight, weight);
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[0].length; j++) {
+                if (array[i][j] < minWeight) {
+                    minWeight = array[i][j];
+                    start = new Point(i, j);
+                }
             }
         }
 
-        return minWeight;
-    }
-
-    private double calculateEdgeWeight(Integer[][] array, Point p1, Point p2) {
-        int weight1 = array[p1.getY()][p1.getX()];
-        int weight2 = array[p2.getY()][p2.getX()];
-        return (weight1 + weight2) / 2.0;
+        return start;
     }
 
     /**
