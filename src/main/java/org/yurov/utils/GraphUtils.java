@@ -100,11 +100,11 @@ public class GraphUtils {
                 Comparator.comparingInt(EdgeForPoint::getWeight)
         );
 
-        boolean[][] visited = new boolean[rows][cols];
+        boolean[][] visited = new boolean[cols][rows];
 
         List<Point[]> mstEdges = new ArrayList<>();
 
-        visited[start.getY()][start.getX()] = true;
+        visited[start.getX()][start.getY()] = true;
         addEdges(start, array, visited, priorityQueue, directions);
 
         while (!priorityQueue.isEmpty()) {
