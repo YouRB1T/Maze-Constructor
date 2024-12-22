@@ -29,4 +29,13 @@ public class ArrayUtils {
         return stringArray.toString();
     }
 
+    public static void fillInIntegerArray(Integer[][] array) {
+        for (int row = 0; row < array.length; row++) {
+            for (int col = 0; col < array[0].length; col++) {
+                if (array[row][col] == null)
+                    array[row][col] = 0;
+            }
+        }
+    }
+
 }

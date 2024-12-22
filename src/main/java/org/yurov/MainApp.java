@@ -1,9 +1,11 @@
 package org.yurov;
 
+import org.yurov.dto.MazeDTOClient;
 import org.yurov.entities.Point;
 import org.yurov.entities.graph.Edge;
 import org.yurov.entities.graph.SimpleGraph;
 import org.yurov.entities.graph.Vertex;
+import org.yurov.entities.maze.SimpleMaze;
 import org.yurov.utils.ArrayUtils;
 import org.yurov.utils.GraphUtils;
 
@@ -93,16 +95,31 @@ public class MainApp {
 
 
     public static void main(String[] args) {
-        // Пример входного массива
-        Integer[][] array = new Integer[][]{
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
-        };
+        Integer[][] array = ArrayUtils.generateRandom2DArray(3, 3, 3, 10);
 
         System.out.println(ArrayUtils.D2DArrayToString(array));
 
         GraphUtils program = new GraphUtils();
+
+        program.resultInListPointsAlgorithmPrima(new SimpleMaze(array)).forEach(
+                points -> {
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append(points[0]).append(" -> ").append(points[1]);
+
+                    System.out.println(sb.toString());
+                }
+        );
+
+
+        List<Point[]> answer = program.resultInListPointsAlgorithmPrima(new SimpleMaze(array));
+        MazeDTOClient mazeDTOClient = new MazeDTOClient();
+
+        mazeDTOClient.transportMazeToClient(array[0].length, array.length, answer);
+
+        ArrayUtils.fillInIntegerArray(mazeDTOClient.getMaze());
+
+        System.out.println(ArrayUtils.D2DArrayToString(mazeDTOClient.getMaze()));
 
     }
 

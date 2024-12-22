@@ -75,7 +75,7 @@ public class GraphUtils {
         return answer;
     }
 
-    public List<Point[]> algorithmPrima(SimpleMaze maze) {
+    public List<Point[]> resultInListPointsAlgorithmPrima(SimpleMaze maze) {
         return algorithmPrimaOnArray(maze.getArrayMaze());
     }
 
@@ -135,7 +135,7 @@ public class GraphUtils {
             int newY = from.getY() + dir[1];
 
             if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited[newX][newY]) {
-                Point to = new Point(newX, newY);
+                Point to = new Point(newX, newY, array[newX][newY]);
                 queue.add(new EdgeForPoint(from, to, EdgeForPointUtils.calculateWeight(array, from, to)));
             }
         }
@@ -150,7 +150,7 @@ public class GraphUtils {
             for (int j = 0; j < array[0].length; j++) {
                 if (array[i][j] < minWeight) {
                     minWeight = array[i][j];
-                    start = new Point(i, j);
+                    start = new Point(i, j, minWeight);
                 }
             }
         }
