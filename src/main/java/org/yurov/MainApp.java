@@ -115,8 +115,6 @@ public class MainApp {
         List<Point[]> answer = program.resultInListPointsAlgorithmPrima(new SimpleMaze(array));
         MazeDTOClient mazeDTOClient = new MazeDTOClient();
 
-        mazeDTOClient.transportMazeToClient(array[0].length, array.length, answer);
-
         ArrayUtils.fillInIntegerArray(mazeDTOClient.getMaze());
 
         System.out.println(ArrayUtils.D2DArrayToString(mazeDTOClient.getMaze()));
