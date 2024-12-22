@@ -1,11 +1,11 @@
 package org.yurov.utils;
 
 import org.yurov.entities.EdgeForPoint;
-import org.yurov.entities.EdgeForPointUtils;
 import org.yurov.entities.Point;
 import org.yurov.entities.graph.Edge;
 import org.yurov.entities.graph.SimpleGraph;
 import org.yurov.entities.graph.Vertex;
+import org.yurov.entities.maze.SimpleMaze;
 import org.yurov.entities.tree.SpanningTree;
 
 import java.util.*;
@@ -75,8 +75,8 @@ public class GraphUtils {
         return answer;
     }
 
-    public List<Point[]> algorithmPrima(Integer[][] array) {
-        return algorithmPrimaOnArray(array);
+    public List<Point[]> algorithmPrima(SimpleMaze maze) {
+        return algorithmPrimaOnArray(maze.getArrayMaze());
     }
 
     private List<Point[]> algorithmPrimaOnArray(Integer[][] array) {
@@ -160,19 +160,19 @@ public class GraphUtils {
 
     /**
      * Alias to return SpanningTree
-     * @param graph (SimpleGraph)
+     * @param maze (SimpleMaze)
      * @return SpanningTree
      */
-    public SpanningTree resultInTreeAlgorithmPrima(SimpleGraph graph) {
-        return new SpanningTree(graph);
+    public SpanningTree resultInTreeAlgorithmPrima(SimpleMaze maze) {
+        return new SpanningTree(maze.getGraph());
     }
 
     /**
      * Open method
-     * @param graph (SimpleGraph)
+     * @param maze (SimpleMaze)
      * @return SimpleGraph
      */
-    public SimpleGraph resultInGraphAlgorithmPrima(SimpleGraph graph) {
-        return algorithmPrima(graph);
+    public SimpleGraph resultInGraphAlgorithmPrima(SimpleMaze maze) {
+        return algorithmPrima(maze.getGraph());
     }
 }

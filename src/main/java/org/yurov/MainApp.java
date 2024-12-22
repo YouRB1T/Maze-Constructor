@@ -102,19 +102,8 @@ public class MainApp {
 
         System.out.println(ArrayUtils.D2DArrayToString(array));
 
-        // Создаём экземпляр класса с алгоритмом
-        GraphUtils program = new GraphUtils(); // Если метод в другом классе, укажи его имя вместо Main
+        GraphUtils program = new GraphUtils();
 
-        // Запускаем алгоритм
-        List<Point[]> mstEdges = program.algorithmPrima(array);
-
-        // Выводим результат
-        System.out.println("Минимальное оставное дерево (MST):");
-        for (Point[] edge : mstEdges) {
-            Point from = edge[0];
-            Point to = edge[1];
-            System.out.printf("(%d, %d) -> (%d, %d)%n", from.getX(), from.getY(), to.getX(), to.getY());
-        }
     }
 
 }

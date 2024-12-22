@@ -12,4 +12,19 @@ import org.yurov.entities.graph.SimpleGraph;
 public class SimpleMaze {
     private SimpleGraph graph;
     private Integer[][] arrayMaze;
+
+    public SimpleMaze() {
+    }
+
+    public SimpleMaze(Integer[][] arrayMaze) {
+        this.arrayMaze = arrayMaze;
+    }
+
+    public Integer[][] getArrayMaze() {
+        return arrayMaze;
+    }
+
+    public SimpleGraph getGraph() {
+        return graph;
+    }
 }
