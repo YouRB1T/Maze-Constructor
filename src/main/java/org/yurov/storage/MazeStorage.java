@@ -22,6 +22,17 @@ public class MazeStorage {
         );
     }
 
+    public MazeStorage(Integer[][] maze) {
+        this.maze = new SimpleMaze(maze);
+        mazeDTOClient = new MazeDTOClient(
+                utilsDTOClient.transportMazeToClient(
+                        this.maze.getWidth(),
+                        this.maze.getHeight(),
+                        graphUtils.resultInListPointsAlgorithmPrima(this.maze)
+                )
+        );
+    }
+
     public SimpleMaze getMaze() {
         return maze;
     }

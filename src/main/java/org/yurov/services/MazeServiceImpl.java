@@ -14,7 +14,7 @@ public class MazeServiceImpl implements MazeService{
     private MazeRepository mazeRepository;
 
     @Override
-    public void create(SimpleMaze maze) {
+    public void create(Integer[][] maze) {
         mazeRepository.addMazeToStorage(maze);
     }
 
@@ -38,7 +38,7 @@ public class MazeServiceImpl implements MazeService{
                 array[3]
         );
 
-        mazeRepository.addMazeToStorage(new SimpleMaze(arrayGenerated));
+        mazeRepository.addMazeToStorage(arrayGenerated);
 
     }
 

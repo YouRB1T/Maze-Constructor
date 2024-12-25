@@ -23,7 +23,7 @@ public class MazeRepository {
         this.mazeStorages = mazeStorages;
     }
 
-    public void addMazeToStorage(SimpleMaze maze) {
+    public void addMazeToStorage(Integer[][] maze) {
         mazeStorages.add(new MazeStorage(maze));
     }
 
