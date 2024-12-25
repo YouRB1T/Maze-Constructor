@@ -1,5 +1,7 @@
 package org.yurov;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.yurov.dto.MazeDTOClient;
 import org.yurov.entities.Point;
 import org.yurov.entities.graph.Edge;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SpringBootApplication
 public class MainApp {
 
     /**
@@ -93,7 +96,7 @@ public class MainApp {
     }
      */
 
-
+/**
     public static void main(String[] args) {
         Integer[][] array = ArrayUtils.generateRandom2DArray(3, 3, 3, 10);
 
@@ -120,5 +123,9 @@ public class MainApp {
         System.out.println(ArrayUtils.D2DArrayToString(mazeDTOClient.getMaze()));
 
     }
+ */
 
+    public static void main(String[] args) {
+        SpringApplication.run(MainApp.class, args);
+    }
 }

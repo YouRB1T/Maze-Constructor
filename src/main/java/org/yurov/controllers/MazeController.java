@@ -56,5 +56,4 @@ public class MazeController {
         return ResponseEntity.ok("Maze in " + index + " was deleted");
     }
 
-
 }
