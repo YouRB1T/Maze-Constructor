@@ -1,35 +1,37 @@
 package org.yurov.repositories;
 
 import org.yurov.dto.MazeDTOClient;
+import org.yurov.storage.MazeStorage;
+import org.yurov.utils.GraphUtils;
+import org.yurov.utils.UtilsDTOClient;
 import org.yurov.entities.maze.SimpleMaze;
 
+import java.util.List;
+
 public class MazeRepository {
-    private SimpleMaze maze;
-    private MazeDTOClient mazeDTOClient;
+    private List<MazeStorage> mazeStorages;
 
-    public MazeRepository() {
-        maze = new SimpleMaze();
-        mazeDTOClient = new MazeDTOClient();
+    public MazeRepository(List<MazeStorage> mazeStorages) {
+        this.mazeStorages = mazeStorages;
     }
 
-    public MazeRepository(SimpleMaze maze, MazeDTOClient mazeDTOClient) {
-        this.maze = maze;
-        this.mazeDTOClient = mazeDTOClient;
+    public List<MazeStorage> getMazeStorages() {
+        return mazeStorages;
     }
 
-    public SimpleMaze getMaze() {
-        return maze;
+    public void setMazeStorages(List<MazeStorage> mazeStorages) {
+        this.mazeStorages = mazeStorages;
     }
 
-    public void setMaze(SimpleMaze maze) {
-        this.maze = maze;
+    public void addMazeToStorage(SimpleMaze maze) {
+        mazeStorages.add(new MazeStorage(maze));
     }
 
-    public MazeDTOClient getMazeDTOClient() {
-        return mazeDTOClient;
+    public MazeStorage getMazeFromIndex(int index) {
+        return mazeStorages.get(index);
     }
 
-    public void setMazeDTOClient(MazeDTOClient mazeDTOClient) {
-        this.mazeDTOClient = mazeDTOClient;
+    public void deleteMaze(int index) {
+        mazeStorages.remove(index);
     }
 }

@@ -1,4 +1,4 @@
-package org.yurov.dto;
+package org.yurov.utils;
 
 import org.yurov.entities.Point;
 

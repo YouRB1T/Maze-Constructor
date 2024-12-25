@@ -11,12 +11,16 @@ import org.yurov.entities.graph.SimpleGraph;
 public class SimpleMaze {
     private SimpleGraph graph;
     private Integer[][] arrayMaze;
+    private int height;
+    private int width;
 
     public SimpleMaze() {
     }
 
     public SimpleMaze(Integer[][] arrayMaze) {
         this.arrayMaze = arrayMaze;
+        height = arrayMaze[0].length;
+        width = arrayMaze.length;
     }
 
     public Integer[][] getArrayMaze() {
@@ -25,5 +29,13 @@ public class SimpleMaze {
 
     public SimpleGraph getGraph() {
         return graph;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

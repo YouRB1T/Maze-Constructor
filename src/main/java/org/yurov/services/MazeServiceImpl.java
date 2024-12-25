@@ -1,51 +1,66 @@
 package org.yurov.services;
 
+import org.springframework.stereotype.Service;
 import org.yurov.dto.MazeDTOClient;
-import org.yurov.dto.UtilsDTOClient;
-import org.yurov.entities.Point;
+import org.yurov.utils.UtilsDTOClient;
 import org.yurov.entities.maze.SimpleMaze;
 import org.yurov.repositories.MazeRepository;
+import org.yurov.utils.ArrayUtils;
 import org.yurov.utils.GraphUtils;
 
+@Service
 public class MazeServiceImpl implements MazeService{
 
     private MazeRepository mazeRepository;
 
     @Override
     public void create(SimpleMaze maze) {
+        mazeRepository.addMazeToStorage(maze);
+    }
 
-        mazeRepository.setMaze(maze);
-        MazeDTOClient mazeDTOClient = new MazeDTOClient();
-        UtilsDTOClient utilsDTOClient = new UtilsDTOClient();
-        GraphUtils graphUtils = new GraphUtils();
+    /**
+     * @param array (height, width, minValue, maxValue)
+     */
+    @Override
+    public void createRandom(Integer[] array) {
+        if (array.length != 4) {
+            throw new RuntimeException("To generate random data array should have 4 numbers");
+        }
 
-        mazeDTOClient.setMaze(utilsDTOClient.transportMazeToClient(
-                maze.getArrayMaze()[0].length,
-                maze.getArrayMaze().length,
-                graphUtils.resultInListPointsAlgorithmPrima(maze)
-        ));
+        if (array[0] % 2 == 0 && array[1] % 2 == 0) {
+            throw new RuntimeException("Height and width should be not even");
+        }
 
-        mazeRepository.setMazeDTOClient(mazeDTOClient);
+        Integer[][] arrayGenerated = ArrayUtils.generateRandom2DArray(
+                array[0],
+                array[1],
+                array[2],
+                array[3]
+        );
+
+        mazeRepository.addMazeToStorage(new SimpleMaze(arrayGenerated));
 
     }
 
     @Override
-    public void createRandom() {
+    public Integer[][] read(int index) {
+        return mazeRepository.getMazeFromIndex(index).getMazeDTOClient().getMaze();
+    }
 
+    /**
+     * @param point (x, y, weight)
+     */
+    @Override
+    public void update(int[] point, int index) {
+        Integer[][] maze = mazeRepository.getMazeFromIndex(index)
+                .getMaze().getArrayMaze();
+        maze[point[0]][point[1]] = point[2];
+
+        mazeRepository.getMazeFromIndex(index).setMaze(new SimpleMaze(maze));
     }
 
     @Override
-    public SimpleMaze read() {
-        return null;
-    }
-
-    @Override
-    public void update(Point point) {
-
-    }
-
-    @Override
-    public void delete() {
-
+    public void delete(int index) {
+        mazeRepository.deleteMaze(index);
     }
 }

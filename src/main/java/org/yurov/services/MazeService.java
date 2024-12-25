@@ -1,18 +1,17 @@
 package org.yurov.services;
 
-import org.yurov.entities.Point;
 import org.yurov.entities.maze.SimpleMaze;
 
 public interface MazeService {
 
     public void create(SimpleMaze maze);
 
-    public void createRandom();
+    public void createRandom(Integer[] array);
 
-    public SimpleMaze read();
+    public Integer[][] read(int i);
 
-    public void update(Point point);
+    public void update(int[] point, int index);
 
-    public void delete();
+    public void delete(int index);
 
 }
